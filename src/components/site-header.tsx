@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { CalendarDays, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,7 @@ type SessionUser = {
 export function SiteHeader() {
     const [user, setUser] = useState<SessionUser>(null);
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         // include credentials to ensure the session cookie is sent
@@ -28,7 +29,7 @@ export function SiteHeader() {
                 setUser(data.user ?? null);
             })
             .catch(() => setUser(null));
-    }, []);
+    }, [pathname]);
 
     async function handleLogout() {
         await fetch("/api/auth/logout", { method: "POST" });
@@ -61,9 +62,9 @@ export function SiteHeader() {
                 </div>
 
                 <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
-                    <Link href="/booking" className="transition hover:text-white">Book</Link>
-                    <Link href="/dashboard" className="transition hover:text-white">Dashboard</Link>
-                    <Link href="/admin" className="transition hover:text-white">Admin</Link>
+                    {!user || user.role === "customer" ? (
+                        <Link href="/booking" className="transition hover:text-white">Book</Link>
+                    ) : null}
                 </nav>
 
                 <div className="flex items-center gap-3">
