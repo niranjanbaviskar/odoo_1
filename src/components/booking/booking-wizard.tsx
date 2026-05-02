@@ -141,9 +141,16 @@ export function BookingWizard({ services, preselectedServiceId = "" }: { service
                 throw new Error(data.error ?? "Booking failed");
             }
 
-            toast.success("Booking confirmed");
-            reset();
-            router.push(`/booking/${data.booking._id}`);
+            // If the service requires payment, booking.paymentStatus will be 'pending'
+            if (data.booking?.paymentStatus === "pending") {
+                toast.success("Booking created — redirecting to payment");
+                reset();
+                router.push(`/payment?bookingId=${data.booking._id}`);
+            } else {
+                toast.success("Booking confirmed");
+                reset();
+                router.push(`/dashboard`);
+            }
         } catch (error) {
             toast.error(error instanceof Error ? error.message : "Unable to book appointment");
         } finally {
