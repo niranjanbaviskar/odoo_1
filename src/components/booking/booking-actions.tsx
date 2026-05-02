@@ -70,7 +70,7 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
                 </div>
                 <div className="flex gap-3">
                     <Button variant="outline" onClick={cancelBooking} disabled={loading !== null}>
-                        {loading === "cancel" ? "Cancelling..." : "Cancel"}
+                        {loading === "cancel" ? "Cancelling...." : "Cancel"}
                     </Button>
                     <Button variant="accent" onClick={rescheduleBooking} disabled={loading !== null}>
                         {loading === "reschedule" ? "Rescheduling..." : "Reschedule"}
